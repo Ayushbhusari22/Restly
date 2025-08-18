@@ -1,0 +1,198 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="row">
+    <div class="col-8 offset-3 mt-3">
+        <h3>
+            <%= listing.title %>
+        </h3>
+    </div>
+    <div class="card col-6 offset-3 mt-3 show-card listing-card">
+        <img src="<%= listing.image.url %>" class="card-img-top show-img" alt="listing-image">
+        <div class="card-body">
+            <p class="card-text"> Owned By :<i>
+                    <%= listing.owner.username %>
+                </i></p>
+            <p class="card-text">
+                <%= listing.description %>
+            </p>
+            <p class="card-text"> &#8377; <%= listing.price.toLocaleString("en-IN") %>
+            </p>
+            <p class="card-text">
+                <%= listing.location %>
+            </p>
+            <p class="card-text">
+                <%= listing.country %>
+            </p>
+            </p>
+        </div>
+    </div>
+
+    <br />
+
+    <% if(currUser && currUser._id.equals(listing.owner._id)) { %>
+
+    <div class="btns">
+        <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark col-1 offset-3 add-btn">Edit</a>
+        <form action="/listings/<%= listing._id %>?_method=DELETE" method="POST">
+            <button class="btn btn-dark offset-5">Delete</button>
+        </form>
+    </div>
+    <% } %>
+
+
+    <div class="col-8 offset-3 mb-3">
+        <% if(currUser) { %>
+        <hr>
+        <h4>Leave a Review</h4>
+        <form action="/listings/<%= listing.id %>/review" method="POST" novalidate
+              class="needs-validation">
+            <div>
+                <label for="rating" class="form-label">Rating</label>
+                <fieldset class="starability-slot">
+                    <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked
+                           aria-label="No rating." />
+                    <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+                    <label for="first-rate1" title="Terrible">1 star</label>
+                    <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+                    <label for="first-rate2" title="Not good">2 stars</label>
+                    <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+                    <label for="first-rate3" title="Average">3 stars</label>
+                    <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+                    <label for="first-rate4" title="Very good">4 stars</label>
+                    <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+                    <label for="first-rate5" title="Amazing">5 stars</label>
+                </fieldset>
+            </div>
+
+            <div class="mb-3">
+                <label for="comment" class="form-label"></label>
+                <textarea placeholder="Comments" name="review[comment]" id="comment" cols="30" rows="5"
+                          class="form-control" required></textarea>
+                <div class="invalid-feedback">
+                    Please add some comments for review
+                </div>
+            </div>
+            <button class="btn btn-outline-dark">Submit</button>
+        </form>
+
+        <% } %>
+
+        <% if(listing.reviews.length > 0) { %>
+        <div class="row mt-3 mb-3">
+            <hr>
+
+            <h3>All Reviews</h3>
+            <!-- <p><b>All Reviews</b></p> -->
+            <% for(review of listing.reviews) { %>
+            <div class="card col-5 ms-3 mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">@<%= review.author.username %>
+                    </h5>
+                    <p class="starability-result card-text" data-rating="<%= review.rating %>">
+                    </p>
+                    <p class="card-text">
+                        <%= review.comment %>
+                    </p>
+
+                    <form
+                          action="/listings/<%= listing._id %>/review/<%= review._id %>?_method=DELETE"
+                          method="POST" class="mb-3">
+                        <button class="btn btn-sm btn-dark">Delete</button>
+                    </form>
+                </div>
+
+            </div>
+            <% } %>
+        </div>
+        <% } %>
+        
+    <!-- </div> -->
+
+    <hr>
+    <div class="col-4">
+        <div class="border p-3 rounded sticky-top">
+            <h4>&#8377; <%= listing.price.toLocaleString("en-IN") %> <span
+                      style="font-weight: 400; font-size: 1rem;">/
+                    night</span></h4>
+            <hr>
+            <!-- Payment Button -->
+            <% if (currUser) { %>
+            <button class="btn btn-danger w-100" id="pay-button" data-listing-id="<%= listing._id %>"
+                    data-amount="<%= listing.price %>">Book and Pay</button>
+            <% } else { %>
+            <a href="/login?redirectUrl=/listings/<%= listing._id %>" class="btn btn-danger w-100">Login to Book</a>
+            <% } %>
+        </div>
+    </div>
+</div>
+    <% if (currUser) { %>
+    <script>
+        // Pass Razorpay Key ID from server to client-side script.
+        // This is available via `res.locals` in your app.js
+        const RAZORPAY_KEY_ID = "<%= razorpayKeyId %>";
+    </script>
+    <script src="/js/payment.js"></script>
+    <% } %>
+    <hr>
+    <div class="col-8 offset-3">
+
+
+        <h3>Where you'll be</h3>
+        <div id="map"
+             data-coordinates="<%= JSON.stringify(listing.geometry.coordinates) %>"
+             data-title="<%= listing.title %>"
+             data-location="<%= listing.location %>">
+        </div>
+        <button id="toggle-theme" class="btn btn-secondary mt-3">Switch to Satellite View</button>
+        <br> <br>
+        <script>
+            const mapEl = document.getElementById('map');
+            const coordinates = JSON.parse(mapEl.dataset.coordinates);
+
+            let map;
+            let satelliteLayer;
+
+            // Create a default OpenStreetMap layer
+            const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            });
+            
+            satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                attribution: '&copy; OpenStreetMap contributors'
+                // attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+            });
+
+            // satelliteLayer = L.tileLayer('https://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}', {
+            //         subdomains: ['mt0', 'mt1', 'mt2', 'mt3'], // ✅ Needed for Google
+            //         maxZoom: 20,
+            //         attribution: '&copy; Google Maps'
+            //     });
+    
+            if (coordinates && coordinates.length === 2) {
+                map = L.map('map').setView([coordinates[1], coordinates[0]], 13);
+
+                osmLayer.addTo(map);
+
+                L.marker([coordinates[1], coordinates[0]])
+                    .addTo(map)
+                    .bindPopup("<b><%= listing.title %></b><br><%= listing.location %>")
+                    .openPopup();
+            } else {
+                console.error('Invalid coordinates:', coordinates);
+                mapEl.innerHTML = '<p class="text-danger">Map location not available</p>';
+            }
+
+            const toggleButton = document.getElementById('toggle-theme');
+            toggleButton.addEventListener('click', () => {
+                if (map.hasLayer(osmLayer)) {
+                    map.removeLayer(osmLayer);
+                    satelliteLayer.addTo(map);
+                    toggleButton.textContent = 'Switch to Map View';
+                } else {
+                    map.removeLayer(satelliteLayer);
+                    osmLayer.addTo(map);
+                    toggleButton.textContent = 'Switch to Satellite View';
+                }
+            });
+        </script>
+    </div>

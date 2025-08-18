@@ -1,0 +1,175 @@
+body {
+    font-family: "Plus Jakarta Sans", serif !important;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container {
+    flex: 1;
+}
+
+/* Navbar */
+.navbar {
+    height: 5rem;
+    background-color: white;
+}
+
+.fa-compass {
+    color: #ff385c;
+    font-size: 2.5rem;
+}
+
+.nav-link {
+    color: #222222 !important;
+    font-size: 18px !important;
+}
+
+/* Footer */
+.f-info-links a {
+    text-decoration: none;
+    color: #222222;
+}
+
+.f-info-links a:hover {
+    text-decoration: underline;
+}
+
+
+.f-info-links,
+.f-info-socials,
+.f-info-brand {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.f-info-socials i {
+    /* width: 100%; */
+    font-size: 1.5rem;
+    margin-right: 1rem;
+}
+
+.f-info {
+    text-align: center;
+    height: 8rem;
+    background-color: #f7f7f7;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Cards */
+.listing-card {
+    border: none !important;
+    margin-bottom: 2rem;
+
+}
+
+.card-img-top {
+    border-radius: 1rem !important;
+    width: 100% !important;
+    object-fit: cover !important;
+}
+
+.card-body {
+    padding: 0 !important;
+}
+
+.card-text p {
+    font-weight: 400 !important;
+}
+
+.listing-link {
+    text-decoration: none;
+}
+
+/* Card Effect */
+.card-img-overlay {
+    opacity: 0;
+}
+
+.card-img-overlay:hover {
+    opacity: 0.2;
+    background-color: white;
+}
+
+/* New Page */
+.add-btn {
+    background-color: #ff385c !important;
+    border: none !important;
+}
+
+/* Show Page */
+
+.show-img {
+    height: 30vh;
+}
+
+.btns {
+    display: flex;
+}
+
+.show-card {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/* Map Styling */
+
+#map {
+    height: 400px;
+    width: 80%;
+}
+
+/* Style for the map container */
+#map {
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    /* Light shadow for depth */
+}
+
+/* Style for the toggle button */
+#toggle-theme {
+    background-color: #ff385c;
+    /* Primary blue color */
+    color: white;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 50px;
+    /* Rounded button */
+    transition: all 0.3s ease;
+    /* Smooth transition for hover effect */
+    display: inline-block;
+    cursor: pointer;
+    text-align: center;
+    font-size: 15px;
+}
+
+#toggle-theme:hover {
+    background-color: #131415;
+    /* Darker blue on hover */
+    transform: scale(1.05);
+    /* Slight scale effect */
+}
+
+#toggle-theme:focus {
+    outline: none;
+    /* Remove focus outline */
+}
+
+/* Add some responsive styling */
+@media (max-width: 768px) {
+    #map {
+        height: 300px;
+        /* Adjust map height on smaller screens */
+    }
+
+    .btn-toggle {
+        width: 100%;
+        padding: 15px 0;
+    }
+}
