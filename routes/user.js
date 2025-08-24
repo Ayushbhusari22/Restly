@@ -4,6 +4,7 @@ const User = require("../models/user.js");
 const wrapAsync = require("../utils/wrapAsync");
 const passport = require("passport");
 const { saveRedirectUrl } = require("../middleware.js");
+const { isLoggedIn } = require('../middleware');
 
 const userController = require("../controllers/users.js");
 
@@ -27,6 +28,56 @@ router
 router.get("/logout",
     userController.logout
 );
+
+// Profile route
+router.get('/', isLoggedIn, async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id)
+            .populate('reviews')
+            .populate('trips');
+        res.render('users/profile', { user });
+    } catch (err) {
+        console.error(err);
+        req.flash('error', 'Unable to load profile');
+        res.redirect('/listings');
+    }
+});
+
+// Profile specific routes
+router.get('/profile', isLoggedIn, async (req, res) => {
+    res.redirect('/user');
+});
+
+router.get('/trips', isLoggedIn, async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id)
+            .populate('trips');
+        res.render('users/profile', { user, activeTab: 'trips' });
+    } catch (err) {
+        req.flash('error', 'Unable to load trips');
+        res.redirect('/user');
+    }
+});
+
+router.get('/wishlists', isLoggedIn, async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id);
+        res.render('users/profile', { user, activeTab: 'wishlists' });
+    } catch (err) {
+        req.flash('error', 'Unable to load wishlists');
+        res.redirect('/user');
+    }
+});
+
+router.get('/settings', isLoggedIn, async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id);
+        res.render('users/profile', { user, activeTab: 'settings' });
+    } catch (err) {
+        req.flash('error', 'Unable to load settings');
+        res.redirect('/user');
+    }
+});
 
 // GET /auth/google - Initiate Google Login
 router.get('/auth/google',

@@ -1,30 +1,109 @@
 <% layout("/layouts/boilerplate") %>
-    <div class="row mt-3">
-        <div class="col-6 offset-3">
-            <h1>Login for Restly</h1>
-            <form action="/login" method="POST" class="needs-validation" novalidate>
-                <div class="mb-3">
-                    <label for="username" class="form-label">Username</label>
-                    <input name="username" id="username" type="text" class="form-control" required>
-                </div>
-                <div class="mb-3">
-                    <label for="password" class="form-label">Password</label>
-                    <input name="password" id="password" type="password" class="form-control" required>
-                </div>
-                <button class="btn btn-success">Login</button>
-                <hr>
-                <p class="text-center">Or</p>
-                
-                <div class="row">
-                    <div class="col-6">
-                        <a href="/auth/google" class="btn btn-danger btn-block" role="button"><i class="fab fa-google"></i> Continue
-                            with Google</a>
+<div class="relative flex size-full min-h-screen flex-col bg-white group/design-root overflow-x-hidden"
+     style='font-family: "Plus Jakarta Sans", "Noto Sans", sans-serif;'>
+    <div class="layout-container flex h-full grow flex-col">
+        <!-- Responsive padding -->
+        <div class="px-4 sm:px-8 md:px-16 lg:px-40 flex flex-1 justify-center">
+            <div class="layout-content-container flex flex-col w-full max-w-[512px] py-3 sm:py-5 flex-1">
+                <!-- Responsive heading -->
+                <h2
+                    class="text-[#181611] tracking-light text-xl sm:text-[28px] font-bold leading-tight px-4 text-center pb-3">
+                    Welcome back
+                </h2>
+
+                <!-- Social login buttons -->
+                <div class="flex justify-center">
+                    <div class="flex flex-1 gap-3 max-w-[480px] flex-col items-stretch px-4 py-3">
+                        <a href="/auth/google"
+                           class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 sm:h-12 px-4 bg-[#f5f3f0] text-[#181611] text-sm sm:text-base font-bold leading-normal tracking-[0.015em] w-full">
+                            <span class="truncate">Continue with Google</span>
+                        </a>
+                        <a href="/auth/github"
+                           class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 sm:h-12 px-4 bg-[#f5f3f0] text-[#181611] text-sm sm:text-base font-bold leading-normal tracking-[0.015em] w-full">
+                            <span class="truncate">Continue with GitHub</span>
+                        </a>
                     </div>
-                    <div class="col-6">
-                        <a href="/auth/github" class="btn btn-dark btn-block" role="button"><i class="fab fa-github"></i>
-                            Continue with GitHub</a>
-                    </div>
                 </div>
-            </form>
+
+                <p class="text-[#8a7e60] text-sm font-normal leading-normal pb-3 pt-1 px-4 text-center">or</p>
+
+                <!-- Login Form -->
+                <form action="/login" method="POST" class="needs-validation" novalidate>
+                    <div class="flex flex-1 justify-center">
+                        <div class="flex flex-col w-full max-w-[480px] px-4 py-3">
+                            <!-- Username field -->
+                            <label for="username" class="flex flex-col flex-1 pb-4">
+                                <p class="text-[#181611] text-sm sm:text-base font-medium leading-normal pb-2">Username
+                                </p>
+                                <input name="username"
+                                       id="username"
+                                       type="text"
+                                       placeholder="Username"
+                                       class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#171512] focus:outline-0 focus:ring-0 border-none bg-[#f4f3f1] focus:border-none h-12 sm:h-14 placeholder:text-[#837b67] p-3 sm:p-4 text-sm sm:text-base font-normal leading-normal"
+                                       required />
+                            </label>
+
+                            <!-- Password field with toggle -->
+                            <label for="password" class="flex flex-col flex-1 pb-4">
+                                <p class="text-[#181611] text-sm sm:text-base font-medium leading-normal pb-2">Password
+                                </p>
+                                <div class="flex w-full flex-1 items-stretch rounded-xl relative">
+                                    <input name="password"
+                                           id="password"
+                                           type="password"
+                                           placeholder="Password"
+                                           class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#171512] focus:outline-0 focus:ring-0 border-none bg-[#f4f3f1] focus:border-none h-12 sm:h-14 placeholder:text-[#837b67] p-3 sm:p-4 text-sm sm:text-base font-normal leading-normal"
+                                           required />
+                                    <button type="button"
+                                            id="togglePassword"
+                                            class="absolute right-3 top-1/2 -translate-y-1/2 text-[#8a7e60] hover:text-[#181611] transition-colors">
+                                        <i class="fa-regular fa-eye-slash password-toggle-icon"></i>
+                                    </button>
+                                </div>
+                            </label>
+
+                            <a href="/forgot-password"
+                               class="text-[#8a7e60] text-sm font-normal leading-normal underline hover:text-[#181611]">
+                                Forgot password?
+                            </a>
+
+                            <!-- Submit button -->
+                            <div class="flex py-3">
+                                <button type="submit"
+                                        class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 sm:h-12 px-4 flex-1 bg-[#f3c144] text-[#181611] text-sm sm:text-base font-bold leading-normal tracking-[0.015em] hover:bg-[#e5b53c] transition-colors">
+                                    <span class="truncate">Log in</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Sign up link -->
+                <p class="text-[#8a7e60] text-sm font-normal leading-normal pb-3 pt-1 px-4 text-center">
+                    Don't have an account?
+                    <a href="/signup" class="underline hover:text-[#181611] transition-colors">Sign up</a>
+                </p>
+            </div>
         </div>
     </div>
+</div>
+
+<!-- Add this script at the end of the file -->
+<script>
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('password');
+    const toggleIcon = togglePassword.querySelector('.password-toggle-icon');
+
+    togglePassword.addEventListener('click', function () {
+        // Toggle password visibility
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+
+        // Toggle icon
+        toggleIcon.classList.toggle('fa-eye');
+        toggleIcon.classList.toggle('fa-eye-slash');
+
+        // Toggle color
+        this.classList.toggle('text-[#181611]');
+    });
+</script>

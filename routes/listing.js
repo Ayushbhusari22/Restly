@@ -47,4 +47,28 @@ router.get("/:id/edit",
     wrapAsync(listingController.renderEditForm)
 );
 
+router.get("/", async (req, res) => {
+    try {
+        let allListings;
+        if (req.query.search) {
+            // Search in title, location, city, state, and country
+            allListings = await Listing.find({
+                $or: [
+                    { city: { $regex: req.query.search, $options: "i" } },
+                    { state: { $regex: req.query.search, $options: "i" } },
+                    { country: { $regex: req.query.search, $options: "i" } },
+                    { location: { $regex: req.query.search, $options: "i" } }
+                ]
+            });
+        } else {
+            allListings = await Listing.find({});
+        }
+        res.render("listings/index", { allListings });
+    } catch (err) {
+        console.error(err);
+        req.flash("error", "Error loading listings");
+        res.redirect("/");
+    }
+});
+
 module.exports = router;

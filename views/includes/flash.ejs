@@ -1,14 +1,31 @@
 <% if(success && success.length) { %>
-    <div class="alert alert-success alert-dismissible fade show col-6 offset-3" role="alert">
-        <%= success %>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    <% } %>
+<div class="fixed top-20 left-1/2 -translate-x-1/2 z-50 p-4 rounded-lg shadow-lg text-white text-center bg-green-500 transition-opacity duration-500 ease-out opacity-100"
+     id="success-message">
+    <%= success %>
+</div>
+<script>
+    setTimeout(() => {
+        const successMsg = document.getElementById('success-message');
+        if (successMsg) {
+            successMsg.style.opacity = '0';
+            setTimeout(() => successMsg.remove(), 500);
+        }
+    }, 3000);
+</script>
+<% } %>
 
-
-        <% if(error && error.length) { %>
-            <div class="alert alert-danger alert-dismissible fade show col-6 offset-3" role="alert">
-                <%= error %>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-            <% } %>
+<% if(error && error.length) { %>
+<div class="fixed top-20 left-1/2 -translate-x-1/2 z-50 p-4 rounded-lg shadow-lg text-white text-center bg-red-500 transition-opacity duration-500 ease-out opacity-100"
+     id="error-message">
+    <%= error %>
+</div>
+<script>
+    setTimeout(() => {
+        const errorMsg = document.getElementById('error-message');
+        if (errorMsg) {
+            errorMsg.style.opacity = '0';
+            setTimeout(() => errorMsg.remove(), 500);
+        }
+    }, 3000);
+</script>
+<% } %>

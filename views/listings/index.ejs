@@ -1,139 +1,103 @@
 <% layout("/layouts/boilerplate") %>
 
-
-<body>
-    <style>
-        #filters {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-
-        .filter {
-            text-align: center;
-            margin-right: 2rem;
-            margin-top: 2rem;
-            opacity: 0.7;
-        }
-
-        .filter:hover {
-            opacity: 1;
-            cursor: pointer;
-        }
-
-        .filter p {
-            font-size: 0.8rem;
-        }
-
-        .tax-info {
-            display: none;
-        }
-
-        .tax-toggle {
-            border: 1px solid black;
-            border-radius: 1rem;
-            height: 3.25rem;
-            padding: 1rem;
-            margin-left: 3rem;
-            display: flex;
-            align-items: center;
-        }
-
-    .form-check-input:checked {
-        background-color: #fe424d;
-        border-color: #fe424d;
+<style>
+    .tax-info {
+        display: none;
     }
-    </style>
+</style>
 
-    <div id="filters">
-        <div class="filter">
-            <div><i class="fa-solid fa-fire"></i></div>
-            <p>Trending</p>
+<div class="px-40 flex flex-1 justify-center py-5">
+    <div class="layout-content-container flex flex-col max-w-[960px] flex-1">
+        <div class="px-4 py-3">
+            <div class="flex flex-col gap-3">
+                <!-- Search input with autocomplete -->
+                <label class="flex flex-col min-w-40 h-12 w-full">
+                    <div class="flex w-full flex-1 items-stretch rounded-xl h-full">
+                        <div
+                             class="text-[#8a7e60] flex border-none bg-[#f5f3f0] items-center justify-center pl-4 rounded-l-xl border-r-0"
+                             data-icon="MagnifyingGlass"
+                             data-size="24px"
+                             data-weight="regular">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </div>
+                        <input id="searchInput"
+                               placeholder="Search by city, state or country"
+                               class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#181611] focus:outline-0 focus:ring-0 border-none bg-[#f5f3f0] focus:border-none h-full placeholder:text-[#8a7e60] px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal"
+                               value="" />
+                    </div>
+                </label>
+            </div>
         </div>
-        <div class="filter">
-            <div><i class="fa-solid fa-bed"></i></div>
-            <p>Rooms</p>
+        <div class="flex gap-3 p-3 flex-wrap pr-4">
+            <!-- Filter Icons -->
+            <div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full bg-[#f5f3f0] pl-4 pr-4">
+                <p class="text-[#181611] text-sm font-medium leading-normal">Beachfront</p>
+            </div>
+            <div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full bg-[#f5f3f0] pl-4 pr-4">
+                <p class="text-[#181611] text-sm font-medium leading-normal">Mountain View</p>
+            </div>
+            <div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full bg-[#f5f3f0] pl-4 pr-4">
+                <p class="text-[#181611] text-sm font-medium leading-normal">City Center</p>
+            </div>
+            <div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full bg-[#f5f3f0] pl-4 pr-4">
+                <p class="text-[#181611] text-sm font-medium leading-normal">Pet-Friendly</p>
+            </div>
+            <div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full bg-[#f5f3f0] pl-4 pr-4">
+                <p class="text-[#181611] text-sm font-medium leading-normal">Luxury</p>
+            </div>
         </div>
-        <div class="filter">
-            <div><i class="fa-solid fa-mountain-city"></i></div>
-            <p>Iconic Cities</p>
-        </div>
-        <div class="filter">
-            <div><i class="fa-solid fa-mountain"></i></div>
-            <p>Mountains</p>
-        </div>
-        <div class="filter">
-            <div><i class="fa-brands fa-fort-awesome"></i></div>
-            <p>Castles</p>
-        </div>
-        <div class="filter">
-            <div><i class="fa-solid fa-snowflake"></i></div>
-            <p>Arctic</p>
-        </div>
-        <div class="filter">
-            <div><i class="fa-solid fa-campground"></i></div>
-            <p>Comping</p>
-        </div>
-        <div class="filter">
-            <div><i class="fa-solid fa-cow"></i></div>
-            <p>Farms</p>
-        </div>
-        <div class="filter">
-            <div><i class="fa-solid fa-igloo"></i></div>
-            <p>Domes</p>
-        </div>
-        <div class="filter">
-            <div><i class="fa-solid fa-ship"></i></div>
-            <p>Boats</p>
-        </div>
-        <div class="filter">
-            <div><i class="fa-solid fa-igloo"></i></div>
-            <p>Domes</p>
-        </div>
-        <div class="filter">
-            <div><i class="fa-solid fa-ship"></i></div>
-            <p>Boats</p>
-        </div>
-
-        <div class="tax-toggle">
+        <div class="tax-toggle" style="display: none;">
             <div class="form-check form-switch reverse">
                 <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
                 <label class="form-check-label" for="flexSwitchCheckDefault">Display total after taxes</label>
             </div>
         </div>
-    </div>
-
-
-    <div class="row row-cols-lg-3 row-cols-md-3 row-cols-sm-1 mt-3">
-        <% for(let listing of allListings) { %>
-        <a href="/listings/<%= listing._id %>" class="listing-link">
-            <div class="card col listing-card">
-                <img src="<%= listing.image.url %>" class="card-img-top" alt="listing-image"
-                     style="height: 20rem" />
-                <div class="card-img-overlay"></div>
-                <div class="card-body">
-                    <p class="card-text">
-                        <b>
-                            <%= listing.title %>
-                        </b> <br>
-                        &#8377; <%= (listing.price ? listing.price.toLocaleString("en-IN") : "N/A" ) %> /
-                        night
-                        <i class="tax-info">&nbsp; + &nbsp;18% GST</i>
+        <h2 class="text-[#181611] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">Explore nearby
+        </h2>
+        <div class="grid grid-cols-[repeat(auto-fit,minmax(158px,1fr))] gap-3 p-4">
+            <% for(let listing of allListings) { %>
+            <a href="/listings/<%= listing._id %>" class="listing-link">
+                <div class="flex flex-col gap-3 pb-3">
+                    <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl"
+                         style="background-image: url('<%= listing.image.url %>');"></div>
+                    <p class="text-[#181611] text-base font-medium leading-normal">
+                        <b><%= listing.title %></b>
+                        <br>
+                        &#8377; <%= (listing.price ? listing.price.toLocaleString("en-IN") : "N/A" ) %> / night
+                        <i class="tax-info">&nbsp;+ &nbsp;18% GST</i>
                     </p>
                 </div>
-            </div>
+            </a>
+            <% } %>
+        </div>
 
-        </a>
-        <% } %>
+        <div id="noResults" class="hidden px-4 py-8 text-center text-[#8a7e60]">
+            No listings found for your search criteria
+        </div>
+
+        <div class="flex justify-end overflow-hidden px-5 pb-5">
+            <a href="/listings/new"
+               class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-14 px-5 bg-[#f3c144] text-[#181611] text-base font-bold leading-normal tracking-[0.015em] min-w-0 gap-4 pl-4 pr-6">
+                <div class="text-[#181611]" data-icon="Plus" data-size="24px" data-weight="regular">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor"
+                         viewBox="0 0 256 256">
+                        <path
+                              d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z">
+                        </path>
+                    </svg>
+                </div>
+                <span class="truncate">Create Listing</span>
+            </a>
+        </div>
     </div>
+</div>
 
-    <script>
-        let taxSwitch = document.getElementById("flexSwitchCheckDefault");
+<script>
+    let taxSwitch = document.getElementById("flexSwitchCheckDefault");
+    if (taxSwitch) {
         taxSwitch.addEventListener("click", () => {
-            // console.log("clicked");
             let taxInfo = document.getElementsByClassName("tax-info");
-            // console.log(taxInfo);
-            for (info of taxInfo) {
+            for (let info of taxInfo) {
                 if (info.style.display != "inline") {
                     info.style.display = "inline";
                 } else {
@@ -141,4 +105,34 @@
                 }
             }
         });
-    </script>
+    }
+
+    const searchInput = document.getElementById('searchInput');
+    const listingCards = document.querySelectorAll('.listing-link');
+    const noResults = document.getElementById('noResults');
+
+    searchInput.addEventListener('input', function (e) {
+        const searchTerm = e.target.value.toLowerCase();
+        let hasResults = false;
+
+        listingCards.forEach(card => {
+            const listingText = card.textContent.toLowerCase();
+            if (listingText.includes(searchTerm)) {
+                card.style.display = '';
+                hasResults = true;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        // Show/hide no results message
+        noResults.classList.toggle('hidden', hasResults);
+    });
+
+    // Clear search on page load
+    window.addEventListener('load', () => {
+        searchInput.value = '';
+        listingCards.forEach(card => card.style.display = '');
+        noResults.classList.add('hidden');
+    });
+</script>

@@ -1,77 +1,227 @@
 <style>
-    .search-btn {
-        background-color: #ff385c;
-        color: white;
-        font-weight: bold;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 50px;
-        transition: all 0.3s ease;
-        display: inline-block;
-        cursor: pointer;
-        text-align: center;
-        font-size: 13px;
-        margin-left: 10px;
+    /* Hide scrollbar for mobile nav */
+    .mobile-nav::-webkit-scrollbar {
+        display: none;
     }
 
-    .search-btn:hover {
-        background-color: #131415;
-        transform: scale(1.05);
-        color: white;
-    }
-
-
-    .search-btn i {
-        display: inline;
-        margin-right: 0.5rem;
-    }
-
-    .search-input {
-        border-radius: 25px;
-        padding: 0.5rem 3rem 0.5rem 3rem;
-        font-size: 1rem;
-        transition: all 0.3s ease;
-
-    }
-
-    .search-input:hover {
-        transform: scale(1.05);
+    .mobile-nav {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
     }
 </style>
 
-<nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/listings"><i class="fa-regular fa-compass"></i></a>
-        <button
-                class="navbar-toggler"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#navbarNavAltMarkup">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-                <!-- <a class="nav-link" href="/">Home</a> -->
-                <a class="nav-link" href="/listings">Explore</a>
-                <!-- <a class="nav-link disabled" aria-disabled="true">Disabled</a> -->
-            </div>
-            <div class="navbar-nav ms-auto">
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2 search-input" type="search" placeholder="Search  Destinations">
-                    <button class="btn search-btn" type="submit"><i
-                           class="fa-solid fa-magnifying-glass"></i>Search</button>
-                </form>
-            </div>
-            <div class="navbar-nav ms-auto">
-                <a class="nav-link" href="/listings/new">Airbnb your home</a>
-                <% if(!currUser) { %>
-                <a class="nav-link" href="/signup"><b>Sign up</b></a>
-                <a class="nav-link" href="/login"><b>Log in</b></a>
-                <% } %>
-                <% if(currUser) { %>
-                <a class="nav-link" href="/logout"><b>Log out</b></a>
-                <% } %>
+<nav
+     class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#f5f3f0] px-4 sm:px-10 py-3 relative bg-white">
+    <!-- Left: Logo & Title -->
+    <div class="flex items-center gap-4 text-[#181611]">
+        <div class="w-8 h-8">
+            <img src="/images/favicon.png"
+                 alt="WanderLust Logo"
+                 class="w-full h-full object-contain hover:scale-110 transition-transform duration-200"
+                 loading="lazy">
+        </div>
+        <h2
+            class="text-[#181611] text-lg md:text-2xl font-bold leading-tight tracking-[-0.015em] hover:text-[#f3c144] transition-colors duration-300 cursor-pointer relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bg-[#f3c144] after:left-0 after:bottom-0 after:transition-all after:duration-300 hover:after:w-full">
+            Restly
+        </h2>
+    </div>
+
+    <!-- Hamburger for mobile -->
+    <button id="menu-btn"
+            class="lg:hidden flex items-center justify-center p-2 rounded focus:outline-none focus:ring-2 focus:ring-[#f3c144]"
+            aria-label="Open menu">
+        <svg class="w-6 h-6 text-[#181611]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+    </button>
+
+    <!-- Desktop Nav -->
+    <div class="hidden lg:flex flex-1 justify-end gap-8 items-center">
+        <div class="flex items-center gap-9">
+            <a class="text-[#181611] text-sm font-medium leading-normal hover:text-[#f3c144] transition-colors duration-300"
+               href="/listings">Explore</a>
+            <a class="text-[#181611] text-sm font-medium leading-normal hover:text-[#f3c144] transition-colors duration-300"
+               href="#">Wishlists</a>
+        </div>
+
+        <% if(!currUser) { %>
+        <a href="/login"
+           class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#f3c144] text-[#181611] text-sm font-bold leading-normal tracking-[0.015em] hover:bg-[#e5b53c] transition-colors duration-300">
+            <span class="truncate">Login/Signup</span>
+        </a>
+        <% } %>
+
+        <% if(currUser) { %>
+        <a href="/logout"
+           class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#f3c144] text-[#181611] text-sm font-bold leading-normal tracking-[0.015em] hover:bg-[#e5b53c] transition-colors duration-300">
+            <span class="truncate">Log out</span>
+        </a>
+        <% } %>
+
+        <!-- Replace the existing profile image div in Desktop Nav with this dropdown -->
+        <div class="relative">
+            <button id="profile-menu-button"
+                    class="flex items-center gap-2 rounded-full border border-gray-300 p-2 hover:shadow-md transition-all duration-200"
+                    aria-expanded="false">
+                <svg class="w-5 h-5 text-[#181611]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+                <!-- Replace the existing avatar div -->
+                <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full w-8 h-8 overflow-hidden">
+                    <!-- <% if (currUser?.avatar) { %>
+                    <img src="<%= currUser.avatar %>"
+                         alt="Profile"
+                         class="w-full h-full object-cover"
+                         onerror="this.src='/images/avatar.png'">
+                    <% } else { %> -->
+                    <img src="/images/avatar.png"
+                         alt="Default Profile"
+                         class="w-full h-full object-cover">
+                    <!-- <% } %> -->
+                </div>
+            </button>
+
+            <!-- Dropdown menu -->
+            <div id="profile-dropdown"
+                 class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg py-2 hidden border border-gray-100">
+             
+                <a href="/user/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                    Profile
+                </a>
+                <a href="/user/trips" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                    Trips
+                </a>
+                <a href="/user/wishlists" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                    Wishlists
+                </a>
+                <hr class="my-1 border-gray-200">
+                <a href="/listings/new" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                    Create Listing
+                </a>
+                <a href="/user/settings" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                    Settings
+                </a>
+                <hr class="my-1 border-gray-200">
+                <a href="/logout" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                    Log out
+                </a>
             </div>
         </div>
     </div>
+
+    <!-- Mobile Nav Sidebar -->
+    <div id="mobile-nav"
+         class="mobile-nav fixed inset-0 z-50 bg-white bg-opacity-95 backdrop-blur-lg flex flex-col gap-6 p-6 transition-transform duration-300 transform translate-x-full lg:hidden">
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-[#181611] text-lg font-bold">Restly</h2>
+            <button id="close-menu" class="p-2 rounded focus:outline-none" aria-label="Close menu">
+                <svg class="w-6 h-6 text-[#181611]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <a class="text-[#181611] text-base font-medium py-2 hover:text-[#f3c144] transition-colors duration-300"
+           href="/listings">Explore</a>
+        <a class="text-[#181611] text-base font-medium py-2 hover:text-[#f3c144] transition-colors duration-300"
+           href="/views/includes/user.ejs">Wishlists</a>
+
+        <% if(!currUser) { %>
+        <a href="/login"
+           class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#f3c144] text-[#181611] text-base font-bold leading-normal tracking-[0.015em] w-full hover:bg-[#e5b53c] transition-colors duration-300">
+            <span class="truncate">Login/Signup</span>
+        </a>
+        <% } %>
+
+        <% if(currUser) { %>
+        <a href="/logout"
+           class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#f3c144] text-[#181611] text-base font-bold leading-normal tracking-[0.015em] w-full hover:bg-[#e5b53c] transition-colors duration-300">
+            <span class="truncate">Log out</span>
+        </a>
+        <% } %>
+
+        <!-- Replace the existing mobile nav links section -->
+        <% if(currUser) { %>
+        <a href="/user/profile"
+           class="text-[#181611] text-base font-medium py-2 hover:text-[#f3c144] transition-colors duration-300">
+            Profile
+        </a>
+        <a href="/user/trips"
+           class="text-[#181611] text-base font-medium py-2 hover:text-[#f3c144] transition-colors duration-300">
+            Trips
+        </a>
+        <a href="/user/wishlists"
+           class="text-[#181611] text-base font-medium py-2 hover:text-[#f3c144] transition-colors duration-300">
+            Wishlists
+        </a>
+        <a href="/listings/new"
+           class="text-[#181611] text-base font-medium py-2 hover:text-[#f3c144] transition-colors duration-300">
+            Create Listing
+        </a>
+        <a href="/user/settings"
+           class="text-[#181611] text-base font-medium py-2 hover:text-[#f3c144] transition-colors duration-300">
+            Settings
+        </a>
+        <hr class="my-2 border-gray-200">
+        <a href="/logout"
+           class="text-[#181611] text-base font-medium py-2 hover:text-[#f3c144] transition-colors duration-300">
+            Log out
+        </a>
+        <% } else { %>
+        <a href="/login"
+           class="text-[#181611] text-base font-medium py-2 hover:text-[#f3c144] transition-colors duration-300">
+            Log in
+        </a>
+        <a href="/signup"
+           class="text-[#181611] text-base font-medium py-2 hover:text-[#f3c144] transition-colors duration-300">
+            Sign up
+        </a>
+        <% } %>
+
+        <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 mx-auto hover:ring-2 hover:ring-[#f3c144] transition-all duration-300"
+             style="background-image: url('/images/avatar.png')">
+        </div>
+    </div>
 </nav>
+<script>
+    const menuBtn = document.getElementById('menu-btn');
+    const mobileNav = document.getElementById('mobile-nav');
+    const closeMenu = document.getElementById('close-menu');
+
+    menuBtn.addEventListener('click', () => {
+        mobileNav.classList.remove('translate-x-full');
+        mobileNav.classList.add('translate-x-0');
+    });
+
+    closeMenu.addEventListener('click', () => {
+        mobileNav.classList.remove('translate-x-0');
+        mobileNav.classList.add('translate-x-full');
+    });
+
+    // Optional: close sidebar when clicking outside
+    mobileNav.addEventListener('click', (e) => {
+        if (e.target === mobileNav) {
+            mobileNav.classList.remove('translate-x-0');
+            mobileNav.classList.add('translate-x-full');
+        }
+    });
+
+    // Profile dropdown toggle
+    const profileButton = document.getElementById('profile-menu-button');
+    const profileDropdown = document.getElementById('profile-dropdown');
+
+    if (profileButton && profileDropdown) {
+        profileButton.addEventListener('click', () => {
+            const isExpanded = profileButton.getAttribute('aria-expanded') === 'true';
+            profileButton.setAttribute('aria-expanded', !isExpanded);
+            profileDropdown.classList.toggle('hidden');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!profileButton.contains(e.target) && !profileDropdown.contains(e.target)) {
+                profileButton.setAttribute('aria-expanded', 'false');
+                profileDropdown.classList.add('hidden');
+            }
+        });
+    }
+</script>

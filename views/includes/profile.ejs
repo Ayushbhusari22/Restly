@@ -1,0 +1,19 @@
+<!-- Add this after the profile header section -->
+<div class="flex gap-4 mb-8 border-b">
+    <a href="/profile"
+       class="px-4 py-2 <%= !activeTab || activeTab === 'profile' ? 'border-b-2 border-[#f4c653] text-[#1c170d]' : 'text-gray-500' %>">
+        Profile
+    </a>
+    <a href="/user/trips"
+       class="px-4 py-2 <%= activeTab === 'trips' ? 'border-b-2 border-[#f4c653] text-[#1c170d]' : 'text-gray-500' %>">
+        Trips
+    </a>
+    <a href="/user/wishlists"
+       class="px-4 py-2 <%= activeTab === 'wishlists' ? 'border-b-2 border-[#f4c653] text-[#1c170d]' : 'text-gray-500' %>">
+        Wishlists
+    </a>
+    <a href="/user/settings"
+       class="px-4 py-2 <%= activeTab === 'settings' ? 'border-b-2 border-[#f4c653] text-[#1c170d]' : 'text-gray-500' %>">
+        Settings
+    </a>
+</div>
